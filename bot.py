@@ -3,7 +3,11 @@ from telegram.ext import Application, CommandHandler, ContextTypes
 import env
 
 
-def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print(update.effective_user)
+    await update.message.reply_text(f"Salom, {update.effective_user.first_name}")
+
+async def get_info(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print(update.effective_user)
 
     first_name = update.effective_user.first_name
@@ -34,17 +38,39 @@ def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         4. {is_bot}.
     """ 
     
-    return update.message.reply_text(reply_text)
+    await update.message.reply_text(reply_text)
+    
 
-async def cheksiz_salom(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    while True:
-        reply_text = update.message.reply_text("Salom")
-        await reply_text
+
+        
+async def get_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print(update.effective_user)
+
+    help_text = f"""
+Botimizga Xush Kelibsiz!
+
+Bu quyidagi comandalar bor:
+1. /start - botni ishga tushurish
+2. /info - siz haqizda ma'lumot
+3. /about - biz haqi,izda 
+4. /help - yordam markazi
+
+Qo'shimcha yordam uchun @Abduqodir_Abdmlkvv
+"""
+
+    await update.message.reply_text(help_text)
+async def about(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print(update.effective_user)
+    await update.message.reply_text("Biz IPE School o'quvchilarimiz")
 
 app = Application.builder().token(env.BOT_TOKEN).build()
 
+
+
 app.add_handler(CommandHandler("start", start))
-app.add_handler(CommandHandler("cheksiz_salom", cheksiz_salom))
+app.add_handler(CommandHandler("info", get_info))
+app.add_handler(CommandHandler("help", get_help))
+app.add_handler(CommandHandler("about", about))
 
 
 print("Bot ishga tushdi...")
